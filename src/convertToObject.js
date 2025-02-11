@@ -6,23 +6,23 @@
  * @return {object}
  */
 function convertToObject(sourceString) {
-  if (!sourceString.length) {
+  if (typeof sourceString !== 'string' || !sourceString.trim()) {
     return {};
   }
 
   const result = {};
-  const cleanedString = sourceString
+
+  sourceString
     .split(';')
     .map((item) => item.trim())
-    .filter((item) => item.length > 0);
+    .filter((item) => item.length > 0)
+    .forEach((item) => {
+      const [key, value] = item.split(':').map((part) => part.trim());
 
-  // console.log(cleanedString);
-
-  for (let i = 0; i < cleanedString.length; i++) {
-    const [key, value] = cleanedString[i].split(':');
-
-    result[key.trim()] = value.trim();
-  }
+      if (key && value) {
+        result[key] = value;
+      }
+    });
 
   return result;
 }
